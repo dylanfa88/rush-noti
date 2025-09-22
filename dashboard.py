@@ -16,7 +16,7 @@ tz = pytz.timezone("America/Los_Angeles")
 disp = st7789.ST7789(
     width=320,
     height=240,
-    rotation=180,          # try 90 or 270 if orientation is off
+    rotation=180,
     port=0,
     cs=1,
     dc=9,
@@ -157,6 +157,8 @@ while True:
         # remember for next comparison
         last = stats
     else:
-        print("[warn] using last good stats (API error)")
+        # No network / API error
+        img = draw_message("Please connect to\n'Rush Noti' WiFi\nand select your network")
+        disp.display(img)
 
     time.sleep(60)
