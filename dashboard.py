@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import st7789 as st7789
 from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
