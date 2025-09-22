@@ -167,7 +167,7 @@ while True:
         last = stats
     else:
         # No network / API error
-        img = draw_message("Please connect to\n'Rush Noti' WiFi\nand select your network")
+        img = draw_message("Please connect to\n'Rush Noti' WiFi\nselect your network and\n enter your wifi password")
         disp.display(img)
 
     time.sleep(60)
