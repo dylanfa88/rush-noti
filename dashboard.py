@@ -8,9 +8,11 @@ import requests, time, sys
 import pytz
 from pathlib import Path
 import subprocess
+from dotenv import load_dotenv
+load_dotenv()
 
 # Define California timezone
-tz = pytz.timezone("America/Los_Angeles")
+tz = pytz.timezone(os.getenv("RUSH_NOTI_TIMEZONE"))
 
 # ---------------- Display setup ----------------
 disp = st7789.ST7789(
@@ -27,7 +29,7 @@ disp.begin()
 
 # --- audio setup ---
 ALSA_DEVICE = "default"  # or "hw:0,0"
-SOUND_DIR = Path("/home/dylan/projects/rush-noti/sounds")
+SOUND_DIR = Path(os.getenv("RUSH_NOTI_SOUND_DIR"))
 ORDER_WAV = SOUND_DIR / "order.wav"
 DING_WAV  = SOUND_DIR / "ding.wav"
 
@@ -102,7 +104,7 @@ def ordinal(n):
 
 def fetch_stats():
     try:
-        r = requests.get("https://rushpcbtool.com/cron/get_rush_stats", timeout=10)
+        r = requests.get(os.getenv("RUSH_NOTI_API"), timeout=10)
         r.raise_for_status()
         j = r.json()
         if j.get("status") != "ok":
@@ -118,6 +120,12 @@ def fetch_stats():
     except Exception as e:
         print(f"[error] {e}", file=sys.stderr)
         return None
+
+def draw_message(text):
+    img = Image.new("RGB", (W, H), BLACK)  # black background
+    d = ImageDraw.Draw(img)
+    center_text(d, (0, 0, W, H), text, FONT_LABEL, WHITE)
+    return img
 
 # -------- Loop --------
 last = None  # remember last values to detect increases
